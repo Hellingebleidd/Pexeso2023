@@ -3,6 +3,8 @@ package com.example.pexeso2023
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import android.content.Intent
+import android.util.Log
 
 class MainActivity : AppCompatActivity() {
 
@@ -17,5 +19,23 @@ class MainActivity : AppCompatActivity() {
         btnEasy=findViewById(R.id.buttonEasy)
         btnMedium=findViewById(R.id.buttonMedium)
         btnHard=findViewById(R.id.buttonHard)
+
+        val intent = Intent(this, PexesoActivity::class.java)
+
+        btnEasy.setOnClickListener {
+            intent.putExtra("difficulty", EASY_GAME_CARDS)  //ked chcem poslat nejake parametre napr obtiaznost
+            Log.i("VYBER HRY", "zvolena Easy obtiaznost, karty: $EASY_GAME_CARDS")
+            startActivity(intent)
+        }
+        btnMedium.setOnClickListener {
+            Log.i("VYBER HRY", "zvolena Medium obtiaznost")
+            intent.putExtra("difficulty", MEDIUM_GAME_CARDS)
+            startActivity(intent)
+        }
+        btnHard.setOnClickListener {
+            Log.i("VYBER HRY", "zvolena Hard obtiaznost")
+            intent.putExtra("difficulty", HARD_GAME_CARDS)
+            startActivity(intent)
+        }
     }
 }
