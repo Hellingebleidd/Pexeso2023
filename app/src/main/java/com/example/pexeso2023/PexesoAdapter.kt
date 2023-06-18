@@ -38,7 +38,7 @@ class PexesoAdapter(
 //                    withEndAction { kartaButton.setImageResource(karta.obrazok) }
                 }.start()
 
-                Handler().postDelayed({kartaButton.setImageResource(karta.obrazok)}, RYCHLOST/2)
+                kartaButton.postDelayed({kartaButton.setImageResource(karta.obrazok)}, RYCHLOST/2)
 
 
                 //1) este nie je otocena ziadna karta -> otoc kartu
