@@ -5,16 +5,20 @@ import android.os.SystemClock
 class PexesoGame(difficulty: Int):Game {
 
     val startTime: Long
+    private var uhadnutePary =0
+    private val pocetKariet: Int
 
     init{
         startTime= SystemClock.elapsedRealtime()
+        pocetKariet = difficulty
+
     }
 
     fun getTime() = SystemClock.elapsedRealtime()-startTime
 
-    override fun isWon(): Boolean {
-        TODO("Not yet implemented")
-    }
+    override val isWon: Boolean
+        get() = uhadnutePary == pocetKariet /2
+
 
     override fun foundPair(): Boolean {
         TODO("Not yet implemented")
@@ -27,4 +31,13 @@ class PexesoGame(difficulty: Int):Game {
     override fun choosePair() {
         TODO("Not yet implemented")
     }
+
+//    override fun setBoardSize(pocetKariet: Int) {
+//        var columns=0
+//        when(pocetKariet){
+//            EASY_GAME_CARDS -> columns=2
+//            MEDIUM_GAME_CARDS-> columns=3
+//            HARD_GAME_CARDS -> columns=4
+//        }
+//    }
 }

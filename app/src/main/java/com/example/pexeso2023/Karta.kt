@@ -1,9 +1,8 @@
 package com.example.pexeso2023
 
-abstract class Karta {
-
-    var isVisible: Boolean = false
-    var isMatched: Boolean = false
-    abstract val position: Int
-
-}
+data class Karta (
+    var vidnoObrazok: Boolean = false,
+    var maPar: Boolean = false,
+//    var position: Int,
+    var obrazok: Int
+)
