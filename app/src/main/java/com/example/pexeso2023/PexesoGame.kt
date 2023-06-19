@@ -3,7 +3,6 @@ package com.example.pexeso2023
 import android.os.SystemClock
 import android.util.Log
 import android.widget.ImageButton
-import android.widget.Toast
 
 class PexesoGame(difficulty: Int):Game {
 
@@ -30,7 +29,7 @@ class PexesoGame(difficulty: Int):Game {
         R.drawable.zabka,
         R.drawable.zajcik,
     )
-    var otoceneKarty=0
+    var pocetOtocenych=0
     lateinit var karty:List<Karta>
 
     init{
@@ -43,7 +42,8 @@ class PexesoGame(difficulty: Int):Game {
     override val isWon: Boolean
         get() = uhadnutePary == (pocetKariet /2)
 
-
+    override val otoceneKarty:Int
+        get() = pocetOtocenych
     override fun foundPair(): Boolean {
         TODO("Not yet implemented")
     }
@@ -64,7 +64,7 @@ class PexesoGame(difficulty: Int):Game {
         return karty
     }
 
-    override fun otocKartu(position: Int) {
+    override fun otocKartu(position: Int, button: ImageButton) {
         var karta = karty[position]
         Log.d(TAG, "otacam kartu na pozicii $position")
 
@@ -73,17 +73,31 @@ class PexesoGame(difficulty: Int):Game {
         when(otoceneKarty){
             0->{// otoc kartu a nacitaj jej obrazok
                 Log.d(TAG, "otacam prvu kartu")
-                otoceneKarty+=1
+                pocetOtocenych+=1
+                button.animate().apply {
+                    duration= PexesoAdapter.RYCHLOST
+                    rotationYBy(180f)
+
+                }.start()
+                button.postDelayed({button.setImageResource(karta.obrazok)}, PexesoAdapter.RYCHLOST /2)
+
             }
             1->{//otoc kartu a porovnaj ci je to par
                 Log.d(TAG, "otacam druhu kartu")
-                otoceneKarty+=1
+                pocetOtocenych+=1
+                button.animate().apply {
+                    duration= PexesoAdapter.RYCHLOST
+                    rotationYBy(180f)
+
+                }.start()
+                button.postDelayed({button.setImageResource(karta.obrazok)}, PexesoAdapter.RYCHLOST /2)
             }
             2->{// toast invalid move
                 Log.d(TAG, "uz su 2 karty otocene")
+
+                }
             }
         }
 
     }
 
-}

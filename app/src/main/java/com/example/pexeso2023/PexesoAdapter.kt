@@ -32,18 +32,19 @@ class PexesoAdapter(
 
             kartaButton.setOnClickListener{
                 Log.d(TAG, "poloha karty: ${karta.obrazok}")
-                listener.onKartaClick(position)
+                listener.onKartaClick(position, kartaButton)
 
 //                if(karta.vidnoObrazok){
 //                    Toast.makeText(context, "Invalid move!", Toast.LENGTH_LONG).show()
 //                }else {
-                    karta.vidnoObrazok = true
-                    kartaButton.animate().apply {
-                        duration= RYCHLOST
-                        rotationYBy(180f)
+//                    karta.vidnoObrazok = true
 
-                    }.start()
-                    kartaButton.postDelayed({kartaButton.setImageResource(karta.obrazok)}, RYCHLOST/2)
+//                    kartaButton.animate().apply {
+//                        duration= RYCHLOST
+//                        rotationYBy(180f)
+//
+//                    }.start()
+//                    kartaButton.postDelayed({kartaButton.setImageResource(karta.obrazok)}, RYCHLOST/2)
 
 
                 }

@@ -1,6 +1,8 @@
 package com.example.pexeso2023
 
+
 import android.os.Bundle
+
 import android.util.Log
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
@@ -33,9 +35,9 @@ class PexesoActivity : AppCompatActivity() {
 
         game=PexesoGame(karty)
         adapter = PexesoAdapter(this, plocha, game.getObrazky(), object: KartaClickListener{
-            override fun onKartaClick(position:Int) {
+            override fun onKartaClick(position:Int, kartaButton: ImageButton) {
                 Log.d(TAG, "poloha karty: ${position}")
-                updateBoard(position)
+                updateBoard(position, kartaButton)
             }
         })
 
@@ -46,10 +48,13 @@ class PexesoActivity : AppCompatActivity() {
 
     }
 
-    private fun updateBoard(position:Int) {
-      game.otocKartu(position)
+    private fun updateBoard(position:Int, kartaButton: ImageButton) {
+
+        if(game.otoceneKarty<2){
+            game.otocKartu(position, kartaButton)
+        }
+        }
 
     }
 
 
-}

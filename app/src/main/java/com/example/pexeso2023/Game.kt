@@ -1,5 +1,6 @@
 package com.example.pexeso2023
 
+import android.widget.ImageButton
 import java.io.Serializable
 
 const val EASY_GAME_CARDS = 8
@@ -9,10 +10,11 @@ const val HARD_GAME_CARDS = 20 //16
 interface Game: Serializable {
 
     val isWon: Boolean
+    val otoceneKarty: Int
     fun foundPair(): Boolean
     fun attempts():Int
     fun choosePair()
     fun getObrazky():List<Karta>
-    fun otocKartu(position: Int)
+    fun otocKartu(position: Int, button: ImageButton)
 
 }
