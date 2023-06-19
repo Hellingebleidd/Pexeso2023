@@ -1,5 +1,6 @@
 package com.example.pexeso2023
 
+import android.nfc.Tag
 import android.os.SystemClock
 import android.util.Log
 import android.widget.ImageButton
@@ -8,6 +9,7 @@ class PexesoGame(difficulty: Int):Game {
 
     companion object {
         const val TAG = "PexesoGame"
+        const val RYCHLOST: Long = 500
     }
 
     val startTime: Long
@@ -44,16 +46,30 @@ class PexesoGame(difficulty: Int):Game {
 
     override val otoceneKarty:Int
         get() = pocetOtocenych
-    override fun foundPair(): Boolean {
-        TODO("Not yet implemented")
-    }
+
+    override var foundPair:Boolean = false
 
     override fun attempts(): Int {
         TODO("Not yet implemented")
     }
 
-    override fun choosePair() {
-        TODO("Not yet implemented")
+    override fun choosePair(position1: Int, position2: Int):Boolean {
+        var karta1 = karty[position1]
+        var karta2 = karty[position2]
+        Log.d(TAG, "prva karta obr: ${karta1.obrazok}")
+        Log.d(TAG, "druha karta obr: ${karta2.obrazok}")
+        if(karta1.obrazok==karta2.obrazok){
+            foundPair=true
+            uhadnutePary+=1
+            karta1.maPar=true
+            karta2.maPar=true
+        }else{
+            //sa otocia nazad
+
+        }
+        Log.d(TAG, "found pair: $foundPair")
+//        pocetOtocenych=0
+        return foundPair
     }
 
     override fun getObrazky(): List<Karta> {
@@ -67,37 +83,24 @@ class PexesoGame(difficulty: Int):Game {
     override fun otocKartu(position: Int, button: ImageButton) {
         var karta = karty[position]
         Log.d(TAG, "otacam kartu na pozicii $position")
-
         Log.d(TAG, "otacam kartu s obrazkom ${karta.obrazok}")
 
-        when(otoceneKarty){
-            0->{// otoc kartu a nacitaj jej obrazok
-                Log.d(TAG, "otacam prvu kartu")
-                pocetOtocenych+=1
-                button.animate().apply {
-                    duration= PexesoAdapter.RYCHLOST
-                    rotationYBy(180f)
+        pocetOtocenych+=1
 
-                }.start()
-                button.postDelayed({button.setImageResource(karta.obrazok)}, PexesoAdapter.RYCHLOST /2)
+        button.animate().apply {
+            duration= RYCHLOST
+            rotationYBy(180f)
+        }.start()
 
-            }
-            1->{//otoc kartu a porovnaj ci je to par
-                Log.d(TAG, "otacam druhu kartu")
-                pocetOtocenych+=1
-                button.animate().apply {
-                    duration= PexesoAdapter.RYCHLOST
-                    rotationYBy(180f)
-
-                }.start()
-                button.postDelayed({button.setImageResource(karta.obrazok)}, PexesoAdapter.RYCHLOST /2)
-            }
-            2->{// toast invalid move
-                Log.d(TAG, "uz su 2 karty otocene")
-
-                }
-            }
+        if(karta.vidnoObrazok){
+            button.postDelayed({button.setImageResource(android.R.color.holo_green_light)}, RYCHLOST /2)
+            karta.vidnoObrazok=false
+            pocetOtocenych=0
+        }else{
+            button.postDelayed({button.setImageResource(karta.obrazok)}, RYCHLOST /2)
+            karta.vidnoObrazok=true
         }
-
     }
+
+}
 

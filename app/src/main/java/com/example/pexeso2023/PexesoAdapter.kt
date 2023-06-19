@@ -19,7 +19,6 @@ class PexesoAdapter(
 ): RecyclerView.Adapter<PexesoAdapter.KartaViewHolder>() {
     companion object{
         const val TAG = "Pexeso Adapter"
-        const val RYCHLOST: Long = 500
     }
     inner class KartaViewHolder(itemView: View):RecyclerView.ViewHolder(itemView){
 
@@ -33,20 +32,6 @@ class PexesoAdapter(
             kartaButton.setOnClickListener{
                 Log.d(TAG, "poloha karty: ${karta.obrazok}")
                 listener.onKartaClick(position, kartaButton)
-
-//                if(karta.vidnoObrazok){
-//                    Toast.makeText(context, "Invalid move!", Toast.LENGTH_LONG).show()
-//                }else {
-//                    karta.vidnoObrazok = true
-
-//                    kartaButton.animate().apply {
-//                        duration= RYCHLOST
-//                        rotationYBy(180f)
-//
-//                    }.start()
-//                    kartaButton.postDelayed({kartaButton.setImageResource(karta.obrazok)}, RYCHLOST/2)
-
-
                 }
             }
 

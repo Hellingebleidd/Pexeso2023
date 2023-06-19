@@ -11,9 +11,9 @@ interface Game: Serializable {
 
     val isWon: Boolean
     val otoceneKarty: Int
-    fun foundPair(): Boolean
+    var foundPair: Boolean
     fun attempts():Int
-    fun choosePair()
+    fun choosePair(position1:Int, position2:Int):Boolean
     fun getObrazky():List<Karta>
     fun otocKartu(position: Int, button: ImageButton)
 

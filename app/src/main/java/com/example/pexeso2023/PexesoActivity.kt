@@ -1,10 +1,13 @@
 package com.example.pexeso2023
 
 
+import android.graphics.Color
+import android.graphics.LightingColorFilter
 import android.os.Bundle
 
 import android.util.Log
 import android.widget.ImageButton
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,6 +23,10 @@ class PexesoActivity : AppCompatActivity() {
     private lateinit var plocha: Plocha
     private lateinit var adapter: PexesoAdapter
     private lateinit var game: Game
+    var positionPrvejKarty = 0
+    var positionDruhejKarty = 0
+    private lateinit var button1:ImageButton
+    private lateinit var button2:ImageButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,10 +56,38 @@ class PexesoActivity : AppCompatActivity() {
     }
 
     private fun updateBoard(position:Int, kartaButton: ImageButton) {
+//        game.otocKartu(position, kartaButton)
 
-        if(game.otoceneKarty<2){
-            game.otocKartu(position, kartaButton)
+        when(game.otoceneKarty){
+            0->{
+                game.otocKartu(position, kartaButton)
+                positionPrvejKarty=position
+                //zapamataj button
+                button1=kartaButton
+            }
+            1->{
+                game.otocKartu(position, kartaButton)
+                positionDruhejKarty = position
+                button2=kartaButton
+                var najdenyPar = game.choosePair(positionPrvejKarty, positionDruhejKarty) //toto vrati bool
+                if(najdenyPar) {
+                    // true disabluj buttony
+                    button1.isEnabled=false
+                    button1.colorFilter = LightingColorFilter(Color.GRAY, Color.BLACK)
+                    button2.isEnabled=false
+                    button2.colorFilter = LightingColorFilter(Color.GRAY, Color.BLACK)
+                }else {
+                    //false otoc nazad
+//                    Thread.sleep(1000)
+                    game.otocKartu(positionPrvejKarty,button1)
+                    game.otocKartu(positionDruhejKarty,button2)
+                }
+            }
+            2->{
+                Toast.makeText(this, "Invalid move", Toast.LENGTH_LONG).show()
+            }
         }
+        Log.d(TAG, "otocene karty: ${game.otoceneKarty}")
         }
 
     }
