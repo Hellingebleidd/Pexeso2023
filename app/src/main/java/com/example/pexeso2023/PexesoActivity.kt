@@ -1,9 +1,5 @@
 package com.example.pexeso2023
 
-
-import android.graphics.Color
-import android.graphics.LightingColorFilter
-
 import android.os.Bundle
 import android.os.Handler
 
@@ -13,7 +9,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import java.util.concurrent.TimeUnit
 
 class PexesoActivity : AppCompatActivity() {
 
@@ -42,19 +37,19 @@ class PexesoActivity : AppCompatActivity() {
         Log.d("HRA", "pocet parov kariet: $karty")
 
         plocha = Plocha(karty)
-
         game=PexesoGame(karty)
+
         adapter = PexesoAdapter(this, plocha, game.getObrazky(), object: KartaClickListener{
             override fun onKartaClick(position:Int, kartaButton: ImageButton) {
-                Log.d(TAG, "poloha karty: ${position}")
+                Log.d(TAG, "poloha karty: $position")
                 updateBoard(position, kartaButton)
+
             }
         })
 
         hraciaPlocha.adapter=adapter
         hraciaPlocha.setHasFixedSize(true)
         hraciaPlocha.layoutManager = GridLayoutManager(this, plocha.getStlpce()) //zatial hardcoded potom podla obtiaznosti
-
 
     }
 
@@ -64,6 +59,7 @@ class PexesoActivity : AppCompatActivity() {
                 game.otocKartu(position, kartaButton)
                 positionPrvejKarty=position
                 button1=kartaButton
+                button1.isEnabled=false
             }
             1->{
                 game.otocKartu(position, kartaButton)
@@ -79,8 +75,9 @@ class PexesoActivity : AppCompatActivity() {
             }
         }
         Log.d(TAG, "otocene karty: ${game.otoceneKarty}")
-        }
 
     }
+
+}
 
 

@@ -1,11 +1,13 @@
 package com.example.pexeso2023
 
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.LightingColorFilter
 import android.nfc.Tag
 import android.os.SystemClock
 import android.util.Log
 import android.widget.ImageButton
+import androidx.core.view.isVisible
 
 class PexesoGame(difficulty: Int):Game {
 
@@ -14,7 +16,7 @@ class PexesoGame(difficulty: Int):Game {
         const val RYCHLOST: Long = 500
     }
 
-    val startTime: Long
+    private val startTime: Long
     private var uhadnutePary =0
     private val pocetKariet: Int
     private val zoznamObrazkov = listOf(
@@ -44,7 +46,7 @@ class PexesoGame(difficulty: Int):Game {
     fun getTime() = SystemClock.elapsedRealtime()-startTime
 
     override val isWon: Boolean
-        get() = uhadnutePary == (pocetKariet /2)
+        get() = (uhadnutePary == (pocetKariet / 2))
 
     override val otoceneKarty:Int
         get() = pocetOtocenych
@@ -67,23 +69,33 @@ class PexesoGame(difficulty: Int):Game {
         Log.d(TAG, "druha karta obr: ${karta2.obrazok}")
         if(karta1.obrazok==karta2.obrazok){
             foundPair=true
-            uhadnutePary+=1
             karta1.maPar=true
             karta2.maPar=true
             //disabluju sa
             button1.isEnabled=false
-            button1.colorFilter = LightingColorFilter(Color.GRAY, Color.BLACK)
+            button1.isVisible=false
+//            button1.colorFilter = LightingColorFilter(Color.GRAY, Color.BLACK)
             button2.isEnabled=false
-            button2.colorFilter = LightingColorFilter(Color.GRAY, Color.BLACK)
-
+            button2.isVisible=false
+//            button2.colorFilter = LightingColorFilter(Color.GRAY, Color.BLACK)
+            uhadnutePary+=1
         }else{
             //sa otocia nazad
+            button1.isEnabled=true
             otocKartu(position1,button1)
             otocKartu(position2,button2)
 
         }
         Log.d(TAG, "found pair: $foundPair")
+        Log.d(TAG,"uhadnute pary: $uhadnutePary / ${pocetKariet/2}")
         pocetOtocenych=0
+
+        if(isWon){
+            Log.i(TAG, "si vyhral")
+
+        }else{
+            Log.i(TAG, "nic")
+        }
 //        return foundPair
     }
 
@@ -119,6 +131,8 @@ class PexesoGame(difficulty: Int):Game {
             button.postDelayed({button.setImageResource(karta.obrazok)}, RYCHLOST /2)
             karta.vidnoObrazok=true
         }
+
+
     }
 
 }
