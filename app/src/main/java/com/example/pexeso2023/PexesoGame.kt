@@ -1,5 +1,7 @@
 package com.example.pexeso2023
 
+import android.graphics.Color
+import android.graphics.LightingColorFilter
 import android.nfc.Tag
 import android.os.SystemClock
 import android.util.Log
@@ -53,7 +55,12 @@ class PexesoGame(difficulty: Int):Game {
         TODO("Not yet implemented")
     }
 
-    override fun choosePair(position1: Int, position2: Int):Boolean {
+    override fun choosePair(
+        position1: Int,
+        button1: ImageButton,
+        position2: Int,
+        button2: ImageButton
+    ) {
         var karta1 = karty[position1]
         var karta2 = karty[position2]
         Log.d(TAG, "prva karta obr: ${karta1.obrazok}")
@@ -63,13 +70,21 @@ class PexesoGame(difficulty: Int):Game {
             uhadnutePary+=1
             karta1.maPar=true
             karta2.maPar=true
+            //disabluju sa
+            button1.isEnabled=false
+            button1.colorFilter = LightingColorFilter(Color.GRAY, Color.BLACK)
+            button2.isEnabled=false
+            button2.colorFilter = LightingColorFilter(Color.GRAY, Color.BLACK)
+
         }else{
             //sa otocia nazad
+            otocKartu(position1,button1)
+            otocKartu(position2,button2)
 
         }
         Log.d(TAG, "found pair: $foundPair")
-//        pocetOtocenych=0
-        return foundPair
+        pocetOtocenych=0
+//        return foundPair
     }
 
     override fun getObrazky(): List<Karta> {
@@ -87,16 +102,20 @@ class PexesoGame(difficulty: Int):Game {
 
         pocetOtocenych+=1
 
-        button.animate().apply {
-            duration= RYCHLOST
-            rotationYBy(180f)
-        }.start()
+        Log.d(TAG, "otocene karty: $pocetOtocenych")
 
         if(karta.vidnoObrazok){
+            button.animate().apply {
+                duration= RYCHLOST
+                rotationYBy(-180f)
+            }.start()
             button.postDelayed({button.setImageResource(android.R.color.holo_green_light)}, RYCHLOST /2)
             karta.vidnoObrazok=false
-            pocetOtocenych=0
         }else{
+            button.animate().apply {
+                duration= RYCHLOST
+                rotationYBy(180f)
+            }.start()
             button.postDelayed({button.setImageResource(karta.obrazok)}, RYCHLOST /2)
             karta.vidnoObrazok=true
         }

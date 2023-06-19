@@ -3,7 +3,9 @@ package com.example.pexeso2023
 
 import android.graphics.Color
 import android.graphics.LightingColorFilter
+
 import android.os.Bundle
+import android.os.Handler
 
 import android.util.Log
 import android.widget.ImageButton
@@ -11,6 +13,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import java.util.concurrent.TimeUnit
 
 class PexesoActivity : AppCompatActivity() {
 
@@ -56,32 +59,20 @@ class PexesoActivity : AppCompatActivity() {
     }
 
     private fun updateBoard(position:Int, kartaButton: ImageButton) {
-//        game.otocKartu(position, kartaButton)
-
         when(game.otoceneKarty){
             0->{
                 game.otocKartu(position, kartaButton)
                 positionPrvejKarty=position
-                //zapamataj button
                 button1=kartaButton
             }
             1->{
                 game.otocKartu(position, kartaButton)
                 positionDruhejKarty = position
                 button2=kartaButton
-                var najdenyPar = game.choosePair(positionPrvejKarty, positionDruhejKarty) //toto vrati bool
-                if(najdenyPar) {
-                    // true disabluj buttony
-                    button1.isEnabled=false
-                    button1.colorFilter = LightingColorFilter(Color.GRAY, Color.BLACK)
-                    button2.isEnabled=false
-                    button2.colorFilter = LightingColorFilter(Color.GRAY, Color.BLACK)
-                }else {
-                    //false otoc nazad
-//                    Thread.sleep(1000)
-                    game.otocKartu(positionPrvejKarty,button1)
-                    game.otocKartu(positionDruhejKarty,button2)
-                }
+
+                Handler().postDelayed({
+                    game.choosePair(positionPrvejKarty, button1 ,positionDruhejKarty, button2)
+                },700)
             }
             2->{
                 Toast.makeText(this, "Invalid move", Toast.LENGTH_LONG).show()

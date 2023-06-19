@@ -13,7 +13,7 @@ interface Game: Serializable {
     val otoceneKarty: Int
     var foundPair: Boolean
     fun attempts():Int
-    fun choosePair(position1:Int, position2:Int):Boolean
+    fun choosePair(position1:Int, button1:ImageButton, position2:Int, button2: ImageButton)
     fun getObrazky():List<Karta>
     fun otocKartu(position: Int, button: ImageButton)
 
