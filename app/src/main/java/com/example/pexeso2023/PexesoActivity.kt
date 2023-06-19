@@ -13,22 +13,8 @@ class PexesoActivity : AppCompatActivity() {
     private var karty = 0
 //    private var sirkaPlochy=0
     private lateinit var plocha: Plocha
-    private val zoznamObrazkov = listOf(
-        R.drawable.hauko,
-        R.drawable.kohutik,
-        R.drawable.konik,
-        R.drawable.krtek,
-        R.drawable.kvietok,
-        R.drawable.liska,
-        R.drawable.motylik,
-        R.drawable.myska,
-        R.drawable.pavuk,
-        R.drawable.slimak,
-        R.drawable.sova,
-        R.drawable.vtacik,
-        R.drawable.zabka,
-        R.drawable.zajcik,
-    )
+    private lateinit var game: Game
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pexeso)
@@ -41,14 +27,15 @@ class PexesoActivity : AppCompatActivity() {
 
         plocha = Plocha(karty)
 
-        var obrazky = zoznamObrazkov.shuffled().take(plocha.pocetKariet/2)
-        obrazky+=obrazky
-        obrazky=obrazky.shuffled()
-
-        val adapter = PexesoAdapter(this, plocha, obrazky)
+        game=PexesoGame(karty)
+        val adapter = PexesoAdapter(this, plocha, game.getObrazky())
 
         hraciaPlocha.adapter=adapter
         hraciaPlocha.setHasFixedSize(true)
         hraciaPlocha.layoutManager = GridLayoutManager(this, plocha.getStlpce()) //zatial hardcoded potom podla obtiaznosti
+
+
     }
+
+
 }

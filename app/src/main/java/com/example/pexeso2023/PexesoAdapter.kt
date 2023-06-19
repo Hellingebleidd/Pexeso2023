@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import android.os.Handler
+import android.widget.Toast
 import kotlin.math.min
 
 //private val pocetKariet: Int): RecyclerView.Adapter<PexesoAdapter.KartaViewHolder>() {
@@ -26,30 +26,57 @@ class PexesoAdapter(
 
         private val kartaButton: ImageButton = itemView.findViewById(R.id.kartaButton)
         private lateinit var karta: Karta
+//        private var otoceneKarty=0
 
         fun bind(position: Int, karta: Karta) {
             karta.obrazok=obrazky[position]
 
             kartaButton.setOnClickListener{
-                Log.i(TAG, "poloha karty: $position")
-                kartaButton.animate().apply {
-                    duration= RYCHLOST
-                    rotationYBy(180f)
-//                    withEndAction { kartaButton.setImageResource(karta.obrazok) }
-                }.start()
+                Log.i(TAG, "poloha karty: ${karta.obrazok}")
+                if(karta.vidnoObrazok){
+                    Toast.makeText(context, "Invalid move!", Toast.LENGTH_LONG).show()
+                }else {
+                    karta.vidnoObrazok = true
+                    kartaButton.animate().apply {
+                        duration= RYCHLOST
+                        rotationYBy(180f)
 
-                kartaButton.postDelayed({kartaButton.setImageResource(karta.obrazok)}, RYCHLOST/2)
+                    }.start()
+                    kartaButton.postDelayed({kartaButton.setImageResource(karta.obrazok)}, RYCHLOST/2)
+                }
 
-
-                //1) este nie je otocena ziadna karta -> otoc kartu
-                //2) uz je jedna otocena ->
-                //otoc kartu
-                //skontroluj ci je to par
-                //ak nie pockaj 2 sekundy a otoc ich nazad
-                //3) uz su otocene 2 karty -> nedovol otocit dalsiu, toast
+//                when (otoceneKarty) {
+//                    0 -> {// este nie je otocena ziadna karta
+//                        otoceneKarty += 1
+//                        otocKartu(karta)
+//                        Log.i(TAG, "$otoceneKarty")
+//                        karta.vidnoObrazok=true
+//                    }
+//                    1 -> { // uz je jedna otocena
+//                        otoceneKarty += 1
+//                        otocKartu(karta)
+//                        Log.i(TAG, "$otoceneKarty")
+//                        karta.vidnoObrazok=true
+//                        //skontroluj ci je to par
+//                        //ak nie pockaj 2 sekundy a otoc ich nazad
+//                    }
+//                    else -> {// uz su otocene 2 karty
+//                        Log.i(TAG, "$otoceneKarty")
+//                        //toast
+//                        Toast.makeText(context, "Invalid move!", Toast.LENGTH_LONG).show()
+//                    }
+//                }
+                }
             }
-
-        }
+// PROBLEM je ze on zvysy pocet otocenych kariet len ked kliknem dvakrat na tu istu kartu netusim preco
+//        private fun otocKartu(karta: Karta){
+//            Log.i(TAG, "poloha karty: ${karta.obrazok}")
+//            kartaButton.animate().apply {
+//                duration= RYCHLOST
+//                rotationYBy(180f)
+//            }.start()
+//            kartaButton.postDelayed({kartaButton.setImageResource(karta.obrazok)}, RYCHLOST/2)
+//        }
 
     }
 

@@ -13,4 +13,5 @@ interface Game: Serializable {
     fun attempts():Int
     fun choosePair()
 //    fun setBoardSize(pocetKariet: Int)
+    fun getObrazky():List<Int>
 }
