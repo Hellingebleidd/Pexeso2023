@@ -2,17 +2,21 @@ package com.example.pexeso2023
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
-
 class PexesoActivity : AppCompatActivity() {
+
+    companion object{
+        const val TAG= "Pexeso Activity"
+    }
 
     private lateinit var hraciaPlocha : RecyclerView
     private var karty = 0
-//    private var sirkaPlochy=0
     private lateinit var plocha: Plocha
+    private lateinit var adapter: PexesoAdapter
     private lateinit var game: Game
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,17 +27,27 @@ class PexesoActivity : AppCompatActivity() {
 
         val intent = intent
         karty = intent.getIntExtra("difficulty", 0)
-        Log.i("HRA", "pocet parov kariet: $karty")
+        Log.d("HRA", "pocet parov kariet: $karty")
 
         plocha = Plocha(karty)
 
         game=PexesoGame(karty)
-        val adapter = PexesoAdapter(this, plocha, game.getObrazky())
+        adapter = PexesoAdapter(this, plocha, game.getObrazky(), object: KartaClickListener{
+            override fun onKartaClick(position:Int) {
+                Log.d(TAG, "poloha karty: ${position}")
+                updateBoard(position)
+            }
+        })
 
         hraciaPlocha.adapter=adapter
         hraciaPlocha.setHasFixedSize(true)
         hraciaPlocha.layoutManager = GridLayoutManager(this, plocha.getStlpce()) //zatial hardcoded potom podla obtiaznosti
 
+
+    }
+
+    private fun updateBoard(position:Int) {
+      game.otocKartu(position)
 
     }
 
