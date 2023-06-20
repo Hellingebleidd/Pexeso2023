@@ -7,6 +7,8 @@ import android.util.Log
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -29,6 +31,8 @@ class PexesoActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pexeso)
+        var banner: CardView = findViewById(R.id.Banner)
+        banner.isVisible=false
 
         hraciaPlocha = findViewById(R.id.hraciaPlocha)
 
@@ -37,7 +41,7 @@ class PexesoActivity : AppCompatActivity() {
         Log.d("HRA", "pocet parov kariet: $karty")
 
         plocha = Plocha(karty)
-        game=PexesoGame(karty)
+        game=PexesoGame(karty, banner)
 
         adapter = PexesoAdapter(this, plocha, game.getObrazky(), object: KartaClickListener{
             override fun onKartaClick(position:Int, kartaButton: ImageButton) {

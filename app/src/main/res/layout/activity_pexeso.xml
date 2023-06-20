@@ -6,6 +6,49 @@
     android:layout_height="match_parent"
     tools:context=".PexesoActivity">
 
+    <androidx.cardview.widget.CardView
+        android:id="@+id/Banner"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_Nadpis"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="VYHRA"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display2" />
+
+            <TextView
+                android:id="@+id/tv_YourScore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Score:" />
+
+            <TextView
+                android:id="@+id/tvYourTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Your Time: " />
+
+            <TextView
+                android:id="@+id/tv_BestScore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Best Score: xxxx" />
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/hraciaPlocha"
         android:layout_width="0dp"
