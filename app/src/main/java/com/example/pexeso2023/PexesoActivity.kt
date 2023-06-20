@@ -1,14 +1,12 @@
 package com.example.pexeso2023
 
+
 import android.os.Bundle
 import android.os.Handler
-
 import android.util.Log
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.cardview.widget.CardView
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -27,6 +25,7 @@ class PexesoActivity : AppCompatActivity() {
     var positionDruhejKarty = 0
     private lateinit var button1:ImageButton
     private lateinit var button2:ImageButton
+    var portrait = true;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,8 +37,28 @@ class PexesoActivity : AppCompatActivity() {
         karty = intent.getIntExtra("difficulty", 0)
         Log.d("HRA", "pocet parov kariet: $karty")
 
-        plocha = Plocha(karty)
-        game=PexesoGame(karty, this)
+        when(resources.configuration.orientation){
+            1->{//portrait
+                portrait = true
+//                stlpce = plocha.getStlpce()
+//                Log.d(TAG, "sirka portrait ${plocha.getStlpce()}")
+            }
+            2->{//landscape
+                portrait = false
+//                stlpce = plocha.riadky
+//                Log.d(TAG, "sirka sirka landscape ${plocha.riadky}")
+
+            }}
+
+            plocha = Plocha(karty, portrait)
+            game=PexesoGame(karty, this)
+
+
+//        val orientation=resources.configuration.orientation
+        var stlpce = plocha.getStlpce()
+        if (portrait) stlpce=plocha.getStlpce() else plocha.riadky
+//        if(portrait) stlpce = plocha.
+
 
         adapter = PexesoAdapter(this, plocha, game.getObrazky(), object: KartaClickListener{
             override fun onKartaClick(position:Int, kartaButton: ImageButton) {
@@ -50,7 +69,9 @@ class PexesoActivity : AppCompatActivity() {
 
         hraciaPlocha.adapter=adapter
         hraciaPlocha.setHasFixedSize(true)
-        hraciaPlocha.layoutManager = GridLayoutManager(this, plocha.getStlpce())
+
+
+        hraciaPlocha.layoutManager = GridLayoutManager(this, stlpce)
 
     }
 

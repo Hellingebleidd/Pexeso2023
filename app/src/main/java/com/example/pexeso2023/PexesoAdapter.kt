@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
+import kotlin.math.max
 import kotlin.math.min
 
 //private val pocetKariet: Int): RecyclerView.Adapter<PexesoAdapter.KartaViewHolder>() {
@@ -38,8 +39,7 @@ class PexesoAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): KartaViewHolder {
-
-        val velkostKarty = min(parent.height/plocha.riadky, parent.width/plocha.getStlpce())
+        val velkostKarty=min(parent.height/plocha.riadky, parent.width/plocha.getStlpce())
 
         val kartaL = LayoutInflater.from(context)
             .inflate(
