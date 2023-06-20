@@ -31,8 +31,6 @@ class PexesoActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pexeso)
-        var banner: CardView = findViewById(R.id.Banner)
-        banner.isVisible=false
 
         hraciaPlocha = findViewById(R.id.hraciaPlocha)
 
@@ -41,19 +39,18 @@ class PexesoActivity : AppCompatActivity() {
         Log.d("HRA", "pocet parov kariet: $karty")
 
         plocha = Plocha(karty)
-        game=PexesoGame(karty, banner)
+        game=PexesoGame(karty, this)
 
         adapter = PexesoAdapter(this, plocha, game.getObrazky(), object: KartaClickListener{
             override fun onKartaClick(position:Int, kartaButton: ImageButton) {
                 Log.d(TAG, "poloha karty: $position")
                 updateBoard(position, kartaButton)
-
             }
         })
 
         hraciaPlocha.adapter=adapter
         hraciaPlocha.setHasFixedSize(true)
-        hraciaPlocha.layoutManager = GridLayoutManager(this, plocha.getStlpce()) //zatial hardcoded potom podla obtiaznosti
+        hraciaPlocha.layoutManager = GridLayoutManager(this, plocha.getStlpce())
 
     }
 

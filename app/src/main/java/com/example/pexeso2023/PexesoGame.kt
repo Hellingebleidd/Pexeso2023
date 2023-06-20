@@ -1,18 +1,14 @@
 package com.example.pexeso2023
 
-import android.content.Intent
+import android.content.Context
 import android.graphics.Color
 import android.graphics.LightingColorFilter
-import android.nfc.Tag
 import android.os.SystemClock
 import android.util.Log
 import android.widget.ImageButton
-import android.widget.TextView
-import androidx.cardview.widget.CardView
-import androidx.core.view.isVisible
-import kotlin.math.max
 
-class PexesoGame(difficulty: Int, banner: CardView):Game {
+
+class PexesoGame(difficulty: Int, private val context: Context):Game {
 
     companion object {
         const val TAG = "PexesoGame"
@@ -39,14 +35,12 @@ class PexesoGame(difficulty: Int, banner: CardView):Game {
         R.drawable.zajcik,
     )
     var pocetOtocenych=0
-    private val scoreBanner: CardView
     lateinit var karty:List<Karta>
-    var bestScore=0
+    var bestTime=Long.MAX_VALUE
 
     init{
         startTime= SystemClock.elapsedRealtime()
         pocetKariet = difficulty
-        scoreBanner=banner
     }
 
     val getTime
@@ -80,11 +74,11 @@ class PexesoGame(difficulty: Int, banner: CardView):Game {
             karta2.maPar=true
             //disabluju sa
             button1.isEnabled=false
-            button1.isVisible=false
-//            button1.colorFilter = LightingColorFilter(Color.GRAY, Color.BLACK)
+//            button1.isVisible=false
+            button1.colorFilter = LightingColorFilter(Color.GRAY, Color.BLACK)
             button2.isEnabled=false
-            button2.isVisible=false
-//            button2.colorFilter = LightingColorFilter(Color.GRAY, Color.BLACK)
+//            button2.isVisible=false
+            button2.colorFilter = LightingColorFilter(Color.GRAY, Color.BLACK)
             uhadnutePary+=1
         }else{
             //sa otocia nazad
@@ -99,24 +93,27 @@ class PexesoGame(difficulty: Int, banner: CardView):Game {
 
         if(isWon){
             Log.i(TAG, "si vyhral")
-            var score = (15*60*1000-getTime)/1000 * pocetKariet/15 //15min - cas hry na sekundy v zavislosti od obtiaznosti
-            var bestScoreText: TextView = scoreBanner.findViewById(R.id.tv_BestScore)
-            var yourScoreText: TextView = scoreBanner.findViewById(R.id.tv_YourScore)
-            var yourTime: TextView = scoreBanner.findViewById(R.id.tvYourTime)
-            val min = getTime / 1000 / 60
-            val sec = getTime / 1000 % 60
-            bestScore = (if(bestScore>score) bestScore else score.toInt())
-            bestScoreText.setText("Best Score: $bestScore")
-            yourScoreText.setText("Score: $score")
-            yourTime.setText("Time: $min:$sec")
-            scoreBanner.isVisible=true
+            zobrazDialog()
 
-        }else{
-            Log.i(TAG, "nic")
+//            var score = (15*60*1000-getTime)/1000 * pocetKariet/15 //15min - cas hry na sekundy v zavislosti od obtiaznosti
         }
-//        return foundPair
     }
 
+    fun konvertujCas(ms: Long):String{
+        val min = ms / 1000 / 60
+        val sec = ms / 1000 % 60
+        return "$min:$sec"
+    }
+    fun zobrazDialog(){
+
+        val yourTime = getTime
+        if(bestTime>yourTime){
+            bestTime=yourTime
+        }
+
+        val dialog = DialogVyhra(context,konvertujCas(yourTime), konvertujCas(bestTime))
+        dialog.showDialog()
+    }
     override fun getObrazky(): List<Karta> {
         var obrazky = zoznamObrazkov.shuffled().take(pocetKariet/2)
         obrazky+=obrazky
