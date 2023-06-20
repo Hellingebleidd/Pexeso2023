@@ -1,8 +1,10 @@
 package com.example.pexeso2023
 
 
+import android.content.Context
 import android.os.Bundle
 import android.os.Handler
+import android.os.PersistableBundle
 import android.util.Log
 import android.widget.ImageButton
 import android.widget.Toast
@@ -26,6 +28,7 @@ class PexesoActivity : AppCompatActivity() {
     private lateinit var button1:ImageButton
     private lateinit var button2:ImageButton
     var portrait = true;
+//    private var isGameOn = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,25 +43,17 @@ class PexesoActivity : AppCompatActivity() {
         when(resources.configuration.orientation){
             1->{//portrait
                 portrait = true
-//                stlpce = plocha.getStlpce()
-//                Log.d(TAG, "sirka portrait ${plocha.getStlpce()}")
             }
             2->{//landscape
                 portrait = false
-//                stlpce = plocha.riadky
-//                Log.d(TAG, "sirka sirka landscape ${plocha.riadky}")
-
             }}
 
-            plocha = Plocha(karty, portrait)
-            game=PexesoGame(karty, this)
+        plocha = Plocha(karty, portrait)
 
+        startGame(karty)
 
-//        val orientation=resources.configuration.orientation
         var stlpce = plocha.getStlpce()
         if (portrait) stlpce=plocha.getStlpce() else plocha.riadky
-//        if(portrait) stlpce = plocha.
-
 
         adapter = PexesoAdapter(this, plocha, game.getObrazky(), object: KartaClickListener{
             override fun onKartaClick(position:Int, kartaButton: ImageButton) {
@@ -69,10 +64,12 @@ class PexesoActivity : AppCompatActivity() {
 
         hraciaPlocha.adapter=adapter
         hraciaPlocha.setHasFixedSize(true)
-
-
         hraciaPlocha.layoutManager = GridLayoutManager(this, stlpce)
 
+    }
+
+    private fun startGame(pocetKariet: Int){
+        game = PexesoGame(pocetKariet,this)
     }
 
     private fun updateBoard(position:Int, kartaButton: ImageButton) {
@@ -97,7 +94,6 @@ class PexesoActivity : AppCompatActivity() {
             }
         }
         Log.d(TAG, "otocene karty: ${game.otoceneKarty}")
-
     }
 
 }
