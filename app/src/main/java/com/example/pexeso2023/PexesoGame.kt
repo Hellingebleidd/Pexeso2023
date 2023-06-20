@@ -36,7 +36,7 @@ class PexesoGame(difficulty: Int, private val context: Context):Game {
     )
     var pocetOtocenych=0
     lateinit var karty:List<Karta>
-    var bestTime=Long.MAX_VALUE
+    var bestTime: Long=0
 
     init{
         startTime= SystemClock.elapsedRealtime()
@@ -105,9 +105,8 @@ class PexesoGame(difficulty: Int, private val context: Context):Game {
         return "$min:$sec"
     }
     fun zobrazDialog(){
-
         val yourTime = getTime
-        if(bestTime>yourTime){
+        if(bestTime<yourTime){
             bestTime=yourTime
         }
 
