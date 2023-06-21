@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.content.Intent
 import android.util.Log
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
 class MainActivity : AppCompatActivity() {
@@ -17,6 +18,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnMedium: Button
     private lateinit var btnHard: Button
 
+    private lateinit var btnLeaderboard: FloatingActionButton
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -24,6 +27,9 @@ class MainActivity : AppCompatActivity() {
         btnEasy=findViewById(R.id.buttonEasy)
         btnMedium=findViewById(R.id.buttonMedium)
         btnHard=findViewById(R.id.buttonHard)
+
+        btnLeaderboard=findViewById(R.id.floatingActionButton)
+
 
         val intent = Intent(this, PexesoActivity::class.java)
 
@@ -41,6 +47,11 @@ class MainActivity : AppCompatActivity() {
             Log.i(TAG, "zvolena Hard obtiaznost")
             intent.putExtra("difficulty", HARD_GAME_CARDS)
             startActivity(intent)
+        }
+
+        val intentScore = Intent(this, LeaderBoardActivity::class.java)
+        btnLeaderboard.setOnClickListener {
+            startActivity(intentScore)
         }
     }
 }

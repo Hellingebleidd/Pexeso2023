@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Pexeso2023</string>
+    <string name="filter_Time">Time</string>
+    <string name="filter_Date">Date of game</string>
+    <string name="leaderboard_title">Leaderboard</string>
+    <string name="filter_by">Filter by:</string>
+    <string name="game_title">PEXESO</string>
 </resources>

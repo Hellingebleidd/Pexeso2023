@@ -35,7 +35,6 @@ class PexesoAdapter(
                 listener.onKartaClick(position, kartaButton)
                 }
             }
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): KartaViewHolder {

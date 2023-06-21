@@ -2,6 +2,7 @@ package com.example.pexeso2023
 
 
 import android.content.Context
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.os.Handler
 import android.os.PersistableBundle
@@ -16,6 +17,7 @@ class PexesoActivity : AppCompatActivity() {
 
     companion object{
         const val TAG= "Pexeso Activity"
+        const val BUNDLE_KEY = "game"
     }
 
     private lateinit var hraciaPlocha : RecyclerView
@@ -50,11 +52,32 @@ class PexesoActivity : AppCompatActivity() {
 
         plocha = Plocha(karty, portrait)
 
-        startGame(karty)
-
         var stlpce = plocha.getStlpce()
         if (portrait) stlpce=plocha.getStlpce() else plocha.riadky
 
+        startGame(karty, stlpce)
+
+//        adapter = PexesoAdapter(this, plocha, game.getObrazky(), object: KartaClickListener{
+//            override fun onKartaClick(position:Int, kartaButton: ImageButton) {
+//                Log.d(TAG, "poloha karty: $position")
+//                updateBoard(position, kartaButton)
+//            }
+//        })
+//
+//        hraciaPlocha.adapter=adapter
+//        hraciaPlocha.setHasFixedSize(true)
+//        hraciaPlocha.layoutManager = GridLayoutManager(this, stlpce)
+
+    }
+
+//    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
+//        super.onSaveInstanceState(outState, outPersistentState)
+//        outState.putSerializable(BUNDLE_KEY, game)
+//    }
+
+    private fun startGame(pocetKariet: Int, stlpce:Int){
+//        isGameOn=true
+        game = PexesoGame(pocetKariet,this)
         adapter = PexesoAdapter(this, plocha, game.getObrazky(), object: KartaClickListener{
             override fun onKartaClick(position:Int, kartaButton: ImageButton) {
                 Log.d(TAG, "poloha karty: $position")
@@ -65,11 +88,6 @@ class PexesoActivity : AppCompatActivity() {
         hraciaPlocha.adapter=adapter
         hraciaPlocha.setHasFixedSize(true)
         hraciaPlocha.layoutManager = GridLayoutManager(this, stlpce)
-
-    }
-
-    private fun startGame(pocetKariet: Int){
-        game = PexesoGame(pocetKariet,this)
     }
 
     private fun updateBoard(position:Int, kartaButton: ImageButton) {
