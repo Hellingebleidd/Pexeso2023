@@ -3,9 +3,20 @@ package com.example.pexeso2023
 import android.content.Context
 import android.graphics.Color
 import android.graphics.LightingColorFilter
+import android.icu.text.SimpleDateFormat
+import android.os.AsyncTask
 import android.os.SystemClock
 import android.util.Log
 import android.widget.ImageButton
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStore
+import com.example.pexeso2023.databaza.Score
+import com.example.pexeso2023.databaza.ScoreDao
+import com.example.pexeso2023.databaza.ScoreDatabase
+import com.example.pexeso2023.databaza.ScoreRepo
+import com.example.pexeso2023.databaza.ScoreViewModel
+import java.util.Date
+import java.util.Locale
 
 
 class PexesoGame(difficulty: Int, private val context: Context):Game {
@@ -13,8 +24,9 @@ class PexesoGame(difficulty: Int, private val context: Context):Game {
     companion object {
         const val TAG = "PexesoGame"
         const val RYCHLOST: Long = 500
-    }
 
+    }
+    private lateinit var mScoreViewModel: ScoreViewModel
     private val startTime: Long
     private var uhadnutePary =0
     private val pocetKariet: Int
@@ -54,49 +66,59 @@ class PexesoGame(difficulty: Int, private val context: Context):Game {
 
     override var foundPair:Boolean = false
 
-    override fun attempts(): Int {
-        TODO("Not yet implemented")
-    }
+//    override fun attempts(): Int {
+//        TODO("Not yet implemented")
+//    }
 
-    override fun choosePair(
-        position1: Int,
-        button1: ImageButton,
-        position2: Int,
-        button2: ImageButton
-    ) {
-        var karta1 = karty[position1]
-        var karta2 = karty[position2]
-        Log.d(TAG, "prva karta obr: ${karta1.obrazok}")
-        Log.d(TAG, "druha karta obr: ${karta2.obrazok}")
-        if(karta1.obrazok==karta2.obrazok){
-            foundPair=true
-            karta1.maPar=true
-            karta2.maPar=true
-            //disabluju sa
-            button1.isEnabled=false
-//            button1.isVisible=false
-            button1.colorFilter = LightingColorFilter(Color.GRAY, Color.BLACK)
-            button2.isEnabled=false
-//            button2.isVisible=false
-            button2.colorFilter = LightingColorFilter(Color.GRAY, Color.BLACK)
-            uhadnutePary+=1
-        }else{
-            //sa otocia nazad
-            button1.isEnabled=true
-            otocKartu(position1,button1)
-            otocKartu(position2,button2)
+//    override fun choosePair(
+//        position1: Int,
+//        button1: ImageButton,
+//        position2: Int,
+//        button2: ImageButton
+//    ) {
+//        var karta1 = karty[position1]
+//        var karta2 = karty[position2]
+//        Log.d(TAG, "prva karta obr: ${karta1.obrazok}")
+//        Log.d(TAG, "druha karta obr: ${karta2.obrazok}")
+//        if(karta1.obrazok==karta2.obrazok){
+//            foundPair=true
+//            karta1.maPar=true
+//            karta2.maPar=true
+//            //disabluju sa
+//            button1.isEnabled=false
+////            button1.isVisible=false
+//            button1.colorFilter = LightingColorFilter(Color.GRAY, Color.BLACK)
+//            button2.isEnabled=false
+////            button2.isVisible=false
+//            button2.colorFilter = LightingColorFilter(Color.GRAY, Color.BLACK)
+//            uhadnutePary+=1
+//        }else{
+//            //sa otocia nazad
+//            button1.isEnabled=true
+//            otocKartu(position1,button1)
+//            otocKartu(position2,button2)
+//
+//        }
+//        Log.d(TAG, "found pair: $foundPair")
+//        Log.d(TAG,"uhadnute pary: $uhadnutePary / ${pocetKariet/2}")
+//        pocetOtocenych=0
+//
+//        if(isWon){
+//            Log.i(TAG, "si vyhral")
+////            insertujDoDbs()
+//            zobrazDialog()
+////            var score = (15*60*1000-getTime)/1000 * pocetKariet/15 //15min - cas hry na sekundy v zavislosti od obtiaznosti
+//        }
+//    }
 
+    fun konvertujObtiaznost(pocetKariet:Int):String{
+        var diff=""
+        when(pocetKariet){
+            EASY_GAME_CARDS->diff= "easy"
+            MEDIUM_GAME_CARDS -> diff= "medium"
+            HARD_GAME_CARDS -> diff= "hard"
         }
-        Log.d(TAG, "found pair: $foundPair")
-        Log.d(TAG,"uhadnute pary: $uhadnutePary / ${pocetKariet/2}")
-        pocetOtocenych=0
-
-        if(isWon){
-            Log.i(TAG, "si vyhral")
-            zobrazDialog()
-
-//            var score = (15*60*1000-getTime)/1000 * pocetKariet/15 //15min - cas hry na sekundy v zavislosti od obtiaznosti
-        }
+        return diff
     }
 
     fun konvertujCas(ms: Long):String{
@@ -104,15 +126,32 @@ class PexesoGame(difficulty: Int, private val context: Context):Game {
         val sec = ms / 1000 % 60
         return "$min:$sec"
     }
-    fun zobrazDialog(){
-        val yourTime = getTime
-        if(bestTime<yourTime){
-            bestTime=yourTime
-        }
+//    fun zobrazDialog(){
+//        val yourTime = getTime
+//        if(bestTime<yourTime){
+//            bestTime=yourTime
+//        }
+//
+//        val dialog = DialogVyhra(context,konvertujCas(yourTime), konvertujCas(bestTime))
+//        dialog.showDialog()
+//    }
 
-        val dialog = DialogVyhra(context,konvertujCas(yourTime), konvertujCas(bestTime))
-        dialog.showDialog()
-    }
+//    fun insertujDoDbs(){
+//        val datum = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+//        var scoreDao=ScoreDatabase.getDatabase(context).scoreDao()
+//        val scoreRepo = ScoreRepo(scoreDao)
+////        val score = Score(null,datum, konvertujCas(getTime), konvertujObtiaznost(pocetKariet))
+////        scoreRepo.upsertScore(score)
+//        AsyncTask.execute {
+//            @Override
+//            fun run() {
+//                var score =
+//                    Score(null, datum, konvertujCas(getTime), konvertujObtiaznost(pocetKariet))
+//                scoreRepo.upsertScore(score)
+//            }
+//        }
+//    }
+
     override fun getObrazky(): List<Karta> {
         var obrazky = zoznamObrazkov.shuffled().take(pocetKariet/2)
         obrazky+=obrazky
@@ -121,33 +160,33 @@ class PexesoGame(difficulty: Int, private val context: Context):Game {
         return karty
     }
 
-    override fun otocKartu(position: Int, button: ImageButton) {
-        var karta = karty[position]
-        Log.d(TAG, "otacam kartu na pozicii $position")
-        Log.d(TAG, "otacam kartu s obrazkom ${karta.obrazok}")
-
-        pocetOtocenych+=1
-
-        Log.d(TAG, "otocene karty: $pocetOtocenych")
-
-        if(karta.vidnoObrazok){
-            button.animate().apply {
-                duration= RYCHLOST
-                rotationYBy(-180f)
-            }.start()
-            button.postDelayed({button.setImageResource(android.R.color.holo_green_light)}, RYCHLOST /2)
-            karta.vidnoObrazok=false
-        }else{
-            button.animate().apply {
-                duration= RYCHLOST
-                rotationYBy(180f)
-            }.start()
-            button.postDelayed({button.setImageResource(karta.obrazok)}, RYCHLOST /2)
-            karta.vidnoObrazok=true
-        }
-
-
-    }
+//    override fun otocKartu(position: Int, button: ImageButton) {
+//        var karta = karty[position]
+//        Log.d(TAG, "otacam kartu na pozicii $position")
+//        Log.d(TAG, "otacam kartu s obrazkom ${karta.obrazok}")
+//
+//        pocetOtocenych+=1
+//
+//        Log.d(TAG, "otocene karty: $pocetOtocenych")
+//
+//        if(karta.vidnoObrazok){
+//            button.animate().apply {
+//                duration= RYCHLOST
+//                rotationYBy(-180f)
+//            }.start()
+//            button.postDelayed({button.setImageResource(android.R.color.holo_green_light)}, RYCHLOST /2)
+//            karta.vidnoObrazok=false
+//        }else{
+//            button.animate().apply {
+//                duration= RYCHLOST
+//                rotationYBy(180f)
+//            }.start()
+//            button.postDelayed({button.setImageResource(karta.obrazok)}, RYCHLOST /2)
+//            karta.vidnoObrazok=true
+//        }
+//
+//
+//    }
 
 }
 
