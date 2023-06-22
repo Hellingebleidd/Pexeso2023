@@ -17,6 +17,7 @@
             android:exported="false" />
         <activity
             android:name=".PexesoActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
