@@ -2,13 +2,11 @@ package com.example.pexeso2023
 
 
 import android.content.Context
-import android.content.pm.ActivityInfo
 import android.graphics.Color
 import android.graphics.LightingColorFilter
 import android.icu.text.SimpleDateFormat
 import android.os.Bundle
 import android.os.Handler
-import android.os.PersistableBundle
 import android.os.SystemClock
 import android.util.Log
 import android.widget.ImageButton
@@ -18,8 +16,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pexeso2023.databaza.Score
-import com.example.pexeso2023.databaza.ScoreDatabase
-import com.example.pexeso2023.databaza.ScoreRepo
 import com.example.pexeso2023.databaza.ScoreViewModel
 import java.util.Date
 import java.util.Locale
@@ -27,12 +23,12 @@ import java.util.Locale
 class PexesoActivity : AppCompatActivity() {
 
     companion object{
-        const val TAG= "Pexeso Activity"
+        const val TAG= "Pexeso_Activity"
         const val BUNDLE_KEY = "game"
     }
 
     private lateinit var hraciaPlocha : RecyclerView
-    private var karty = 0
+    private var pocetKariet = 0
     private lateinit var plocha: Plocha
     private lateinit var adapter: PexesoAdapter
     private lateinit var game: Game
@@ -44,7 +40,8 @@ class PexesoActivity : AppCompatActivity() {
     var pocetOtocenych:Int=0
     var uhadnutePary = 0
     var startTime:Long=0
-    var bestTime = Long.MAX_VALUE
+//    var bestTime = Long.MAX_VALUE
+    private lateinit var bestVysledok: String
     private lateinit var obrazky: List<Karta>
     private lateinit var mScoreViewModel: ScoreViewModel
 //    private var isGameOn = false
@@ -56,8 +53,8 @@ class PexesoActivity : AppCompatActivity() {
         hraciaPlocha = findViewById(R.id.hraciaPlocha)
 
         val intent = intent
-        karty = intent.getIntExtra("difficulty", 0)
-        Log.d("HRA", "pocet parov kariet: $karty")
+        pocetKariet = intent.getIntExtra("difficulty", 0)
+        Log.d("HRA", "pocet parov kariet: $pocetKariet")
 
         when(resources.configuration.orientation){
             1->{//portrait
@@ -67,14 +64,14 @@ class PexesoActivity : AppCompatActivity() {
                 portrait = false
             }}
 
-        plocha = Plocha(karty, portrait)
+        plocha = Plocha(pocetKariet, portrait)
 
         var stlpce = plocha.getStlpce()
         if (portrait) stlpce=plocha.getStlpce() else plocha.riadky
 
         mScoreViewModel = ViewModelProvider(this).get(ScoreViewModel::class.java)
 
-        startGame(karty, stlpce)
+        startGame(pocetKariet, stlpce)
 
         if(isWon()){insertDoDb()}
 
@@ -193,36 +190,45 @@ class PexesoActivity : AppCompatActivity() {
 
         }
         Log.d(PexesoGame.TAG, "found pair: $foundPair")
-        Log.d(PexesoGame.TAG,"uhadnute pary: $uhadnutePary / ${karty/2}")
+        Log.d(PexesoGame.TAG,"uhadnute pary: $uhadnutePary / ${pocetKariet/2}")
         pocetOtocenych=0
 
         if(isWon()){
             var yourTime = SystemClock.elapsedRealtime()-startTime
-            bestTime = updateBestTime(yourTime)
+//            bestTime = updateBestTime(yourTime)
+            bestVysledok = updateBestTime(yourTime)
             zobrazDialog(yourTime)
         }
     }
 
     private fun isWon():Boolean{
-        return uhadnutePary==(karty/2)
+        return uhadnutePary==(pocetKariet/2)
     }
 
-    private fun updateBestTime(time:Long):Long{
-        val pref = getPreferences(MODE_PRIVATE)
-        val bestTime = pref.getLong("time", Long.MAX_VALUE)
-        if(time<bestTime){
-            with(pref.edit()){
-                putLong("time", time)
-                apply()
-            }
-            return time
+    private fun updateBestTime(time:Long):String{
+//        val pref = getPreferences(MODE_PRIVATE)
+        val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+
+        val editor = sharedPreferences.edit()
+        var obtiaznost = ""
+        when(pocetKariet){
+            EASY_GAME_CARDS -> obtiaznost="easy"
+            MEDIUM_GAME_CARDS -> obtiaznost="medium"
+            HARD_GAME_CARDS -> obtiaznost = "hard"
         }
-        return bestTime
+        editor.putString("obtiaznost", obtiaznost).apply()
+        val bestTime = sharedPreferences.getLong("best_time_$obtiaznost", Long.MAX_VALUE)
+        if(time<bestTime){
+            editor.putLong("best_time_$obtiaznost", time).apply()
+        }
+        return (konvertujCas(sharedPreferences.getLong("best_time_$obtiaznost", time)) + ", " + sharedPreferences.getString("obtiaznost", obtiaznost))
+
     }
     private fun zobrazDialog(yourTime: Long){
         Log.d(TAG,"yourTime $yourTime")
-        Log.d(TAG, "bestTime $bestTime")
-        val dialog = DialogVyhra(this, konvertujCas(yourTime), konvertujCas(bestTime))
+//        Log.d(TAG, "bestTime $bestTime")
+        Log.d(TAG, "vysledok: $bestVysledok")
+        val dialog = DialogVyhra(this, konvertujCas(yourTime), bestVysledok)
         dialog.showDialog()
     }
     fun konvertujCas(ms: Long):String{
