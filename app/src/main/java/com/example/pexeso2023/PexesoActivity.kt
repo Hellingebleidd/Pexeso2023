@@ -16,8 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 class PexesoActivity : AppCompatActivity() {
 
     companion object{
-        const val TAG= "Pexeso Activity"
-        const val BUNDLE_KEY = "game"
+        const val TAG= "Pexeso_Activity"
     }
 
     private lateinit var hraciaPlocha : RecyclerView
@@ -30,7 +29,6 @@ class PexesoActivity : AppCompatActivity() {
     private lateinit var button1:ImageButton
     private lateinit var button2:ImageButton
     var portrait = true;
-//    private var isGameOn = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,20 +40,28 @@ class PexesoActivity : AppCompatActivity() {
         karty = intent.getIntExtra("difficulty", 0)
         Log.d("HRA", "pocet parov kariet: $karty")
 
-        when(resources.configuration.orientation){
-            1->{//portrait
-                portrait = true
-            }
-            2->{//landscape
-                portrait = false
-            }}
-
         plocha = Plocha(karty, portrait)
 
-        var stlpce = plocha.getStlpce()
-        if (portrait) stlpce=plocha.getStlpce() else plocha.riadky
+        startGame(karty)
 
-        startGame(karty, stlpce)
+        adapter = PexesoAdapter(this, plocha, game.getObrazky(), object: KartaClickListener{
+            override fun onKartaClick(position:Int, kartaButton: ImageButton) {
+                Log.d(TAG, "poloha karty: $position")
+                updateBoard(position, kartaButton)
+            }
+        })
+
+        hraciaPlocha.adapter=adapter
+        hraciaPlocha.setHasFixedSize(true)
+        hraciaPlocha.layoutManager = GridLayoutManager(this, plocha.getStlpce())
+
+    }
+
+    private fun startGame(pocetKariet: Int){
+
+//        isGameOn=true
+        game = PexesoGame(pocetKariet,this)
+
 
 //        adapter = PexesoAdapter(this, plocha, game.getObrazky(), object: KartaClickListener{
 //            override fun onKartaClick(position:Int, kartaButton: ImageButton) {
@@ -67,27 +73,6 @@ class PexesoActivity : AppCompatActivity() {
 //        hraciaPlocha.adapter=adapter
 //        hraciaPlocha.setHasFixedSize(true)
 //        hraciaPlocha.layoutManager = GridLayoutManager(this, stlpce)
-
-    }
-
-//    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
-//        super.onSaveInstanceState(outState, outPersistentState)
-//        outState.putSerializable(BUNDLE_KEY, game)
-//    }
-
-    private fun startGame(pocetKariet: Int, stlpce:Int){
-//        isGameOn=true
-        game = PexesoGame(pocetKariet,this)
-        adapter = PexesoAdapter(this, plocha, game.getObrazky(), object: KartaClickListener{
-            override fun onKartaClick(position:Int, kartaButton: ImageButton) {
-                Log.d(TAG, "poloha karty: $position")
-                updateBoard(position, kartaButton)
-            }
-        })
-
-        hraciaPlocha.adapter=adapter
-        hraciaPlocha.setHasFixedSize(true)
-        hraciaPlocha.layoutManager = GridLayoutManager(this, stlpce)
     }
 
     private fun updateBoard(position:Int, kartaButton: ImageButton) {
