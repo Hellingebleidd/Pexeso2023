@@ -9,19 +9,25 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.pexeso2023.databaza.Score
 
 class ScoreAdapter: RecyclerView.Adapter<ScoreAdapter.ScoreViewHolder>() {
+//miro
+//    var zoznamScore = emptyList<Score>()
+//        set(value){
+//            field=value
+//            notifyDataSetChanged()
+//        }
 
-    private var zoznamScore = emptyList<Score>()
+    private var zoznamScore = mutableListOf<Score>()
 
     class ScoreViewHolder(itemView: View):RecyclerView.ViewHolder(itemView){
-        private val tv_datum: TextView = itemView.findViewById(R.id.tv_datum)
-        private val tv_obtiaznost: TextView = itemView.findViewById(R.id.tv_obtiaznost)
-        private val tv_cas: TextView = itemView.findViewById(R.id.tv_cas)
+        val tv_datum: TextView = itemView.findViewById(R.id.tv_datum)
+        val tv_obtiaznost: TextView = itemView.findViewById(R.id.tv_obtiaznost)
+        val tv_cas: TextView = itemView.findViewById(R.id.tv_cas)
 
-        fun bind(score: Score) {
-            tv_datum.text=score.datum
-            tv_obtiaznost.text=score.obtiaznost
-            tv_cas.text=score.cas
-        }
+//        fun bind(score: Score) {
+//            tv_datum.text=score.datum
+//            tv_obtiaznost.text=score.obtiaznost
+//            tv_cas.text=score.cas
+//        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ScoreViewHolder {
@@ -33,11 +39,19 @@ class ScoreAdapter: RecyclerView.Adapter<ScoreAdapter.ScoreViewHolder>() {
 
     override fun onBindViewHolder(holder: ScoreViewHolder, position: Int) {
         val score = zoznamScore[position]
-        holder.bind(score)
+        holder.tv_datum.text = score.datum
+        holder.tv_cas.text=score.cas
+        holder.tv_obtiaznost.text = score.obtiaznost
+//        holder.bind(zoznamScore[position])
     }
 
     fun setData(score: List<Score>){
-        this.zoznamScore = score
+        zoznamScore.apply {
+//            clear()
+            addAll(score)
+
+        }
+//        this.zoznamScore = score
         notifyDataSetChanged()
     }
 

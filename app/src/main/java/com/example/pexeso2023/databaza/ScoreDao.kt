@@ -8,11 +8,13 @@ import androidx.room.Upsert
 @Dao
 interface ScoreDao {
 
-    @Query("SELECT * FROM score_table ORDER BY cas DESC")
-    fun getAll(): LiveData<List<Score>>
+    @Query("SELECT * FROM score_table ORDER BY id DESC")
+    suspend fun getAll(): List<Score>
+//    suspend fun getAll(): LiveData<List<Score>>
+
 
     @Upsert
-    fun upsertScore(score: Score)
+    suspend fun upsertScore(score: Score)
 
 //    @Query("DELETE FROM score_table WHERE datum < (NOW() - 30) ")
 //    fun deleteScore(datum:String)

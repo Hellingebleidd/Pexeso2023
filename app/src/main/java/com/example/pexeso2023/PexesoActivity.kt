@@ -4,7 +4,6 @@ package com.example.pexeso2023
 import android.content.Context
 import android.graphics.Color
 import android.graphics.LightingColorFilter
-import android.icu.text.SimpleDateFormat
 import android.os.Bundle
 import android.os.Handler
 import android.os.SystemClock
@@ -14,13 +13,15 @@ import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pexeso2023.databaza.Score
-import com.example.pexeso2023.databaza.ScoreViewModel
-import java.util.Date
-import java.util.Locale
+import com.example.pexeso2023.databaza.ScoreDatabase
+import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class PexesoActivity : AppCompatActivity() {
 
@@ -44,7 +45,7 @@ class PexesoActivity : AppCompatActivity() {
     var startTime:Long=0
     private lateinit var bestVysledok: String
     private lateinit var obrazky: List<Karta>
-    private lateinit var mScoreViewModel: ScoreViewModel
+//    private lateinit var mScoreViewModel: ScoreViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,7 +53,6 @@ class PexesoActivity : AppCompatActivity() {
 
         supportActionBar?.title="Main menu"
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
 
         hraciaPlocha = findViewById(R.id.hraciaPlocha)
 
@@ -70,32 +70,10 @@ class PexesoActivity : AppCompatActivity() {
 
         plocha = Plocha(pocetKariet, portrait)
 
-        var stlpce = plocha.getStlpce()
-        if (portrait) stlpce=plocha.getStlpce() else plocha.riadky
-
-        mScoreViewModel = ViewModelProvider(this).get(ScoreViewModel::class.java)
-
-        startGame(pocetKariet, stlpce)
-
-        if(isWon()){insertDoDb()}
-
-//        adapter = PexesoAdapter(this, plocha, game.getObrazky(), object: KartaClickListener{
-//            override fun onKartaClick(position:Int, kartaButton: ImageButton) {
-//                Log.d(TAG, "poloha karty: $position")
-//                updateBoard(position, kartaButton)
-//            }
-//        })
-//
-//        hraciaPlocha.adapter=adapter
-//        hraciaPlocha.setHasFixedSize(true)
-//        hraciaPlocha.layoutManager = GridLayoutManager(this, stlpce)
+        pripravPlochu()
+        startGame()
 
     }
-
-//    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
-//        super.onSaveInstanceState(outState, outPersistentState)
-//        outState.putSerializable(BUNDLE_KEY, game)
-//    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId){
@@ -106,7 +84,6 @@ class PexesoActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
-
     override fun onBackPressed() {
         showAlertDialog("phone")
     }
@@ -127,21 +104,24 @@ class PexesoActivity : AppCompatActivity() {
         alertDialogBuilder.create().show()
     }
 
-    private fun startGame(pocetKariet: Int, stlpce:Int){
-        startTime=SystemClock.elapsedRealtime()
-//        isGameOn=true
-        game = PexesoGame(pocetKariet,this)
+    private fun pripravPlochu(){
+        game= PexesoGame(pocetKariet,this)
         adapter = PexesoAdapter(this, plocha, game.getObrazky(), object: KartaClickListener{
             override fun onKartaClick(position:Int, kartaButton: ImageButton) {
                 Log.d(TAG, "poloha karty: $position")
                 updateBoard(position, kartaButton)
             }
         })
-
         hraciaPlocha.adapter=adapter
         hraciaPlocha.setHasFixedSize(true)
-        hraciaPlocha.layoutManager = GridLayoutManager(this, stlpce)
+        hraciaPlocha.layoutManager = GridLayoutManager(this, plocha.getStlpce())
 
+    }
+
+    private fun startGame(){
+        startTime=SystemClock.elapsedRealtime()
+//        isGameOn=true
+//        game = PexesoGame(pocetKariet,this)
         obrazky=game.getObrazky()
     }
 
@@ -231,14 +211,30 @@ class PexesoActivity : AppCompatActivity() {
             var yourTime = SystemClock.elapsedRealtime()-startTime
 //            bestTime = updateBestTime(yourTime)
             bestVysledok = updateBestTime(yourTime)
+            addScore(konvertujCas(yourTime))
             zobrazDialog(yourTime)
+        }
+    }
+
+    private fun addScore(time:String){
+        val datum= (LocalDate.now()).format(DateTimeFormatter.ofPattern("dd.MMMM")) //toString() //.substring(0,10)
+        val time = time
+        var obtiaznost = "" //pocetKariet.toString()
+        when(pocetKariet){
+            EASY_GAME_CARDS -> obtiaznost="easy"
+            MEDIUM_GAME_CARDS -> obtiaznost="medium"
+            HARD_GAME_CARDS -> obtiaznost = "hard"
+        }
+
+        lifecycleScope.launch {
+            val score = Score(datum, time, obtiaznost)
+            ScoreDatabase(this@PexesoActivity).scoreDao().upsertScore(score  )
         }
     }
 
     private fun isWon():Boolean{
         return uhadnutePary==(pocetKariet/2)
     }
-
     private fun updateBestTime(time:Long):String{
 //        val pref = getPreferences(MODE_PRIVATE)
         val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
@@ -268,16 +264,18 @@ class PexesoActivity : AppCompatActivity() {
     fun konvertujCas(ms: Long):String{
         val min = ms / 1000 / 60
         val sec = ms / 1000 % 60
-        return "$min:$sec"
+        val sekundy = ("0000"+sec).takeLast(2)
+        return "$min:$sekundy"
     }
-    private fun insertDoDb(){
-        val datum = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
-//        var scoreDao= ScoreDatabase.getDatabase(this).scoreDao()
-//        val scoreRepo = ScoreRepo(scoreDao)
-        val score = Score(null,datum, "1:12", "easy")
-//        scoreRepo.upsertScore(score)
-        mScoreViewModel.upsertScore(score)
-    }
+
+//    private fun insertDoDb(){
+//        val datum = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+////        var scoreDao= ScoreDatabase.getDatabase(this).scoreDao()
+////        val scoreRepo = ScoreRepo(scoreDao)
+//        val score = Score(null,datum, "1:12", "easy")
+////        scoreRepo.upsertScore(score)
+//        mScoreViewModel.upsertScore(score)
+//    }
 
 }
 
