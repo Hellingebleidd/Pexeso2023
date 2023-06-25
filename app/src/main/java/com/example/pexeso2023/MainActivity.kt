@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        val intentScore = Intent(this, LeaderBoardActivity::class.java)
+        val intentScore = Intent(this@MainActivity, LeaderBoardActivity::class.java)
         btnLeaderboard.setOnClickListener {
             startActivity(intentScore)
         }

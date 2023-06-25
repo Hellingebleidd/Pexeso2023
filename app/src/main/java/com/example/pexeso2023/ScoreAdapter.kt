@@ -10,12 +10,16 @@ import com.example.pexeso2023.databaza.Score
 
 class ScoreAdapter: RecyclerView.Adapter<ScoreAdapter.ScoreViewHolder>() {
 
-    private var zoznamScore = emptyList<Score>()
+    var zoznamScore = emptyList<Score>()
+        set(value){
+            field = value
+            notifyDataSetChanged()
+        }
 
     class ScoreViewHolder(itemView: View):RecyclerView.ViewHolder(itemView){
-        private val tv_datum: TextView = itemView.findViewById(R.id.tv_datum)
-        private val tv_obtiaznost: TextView = itemView.findViewById(R.id.tv_obtiaznost)
-        private val tv_cas: TextView = itemView.findViewById(R.id.tv_cas)
+        val tv_datum: TextView = itemView.findViewById(R.id.tv_datum)
+        val tv_obtiaznost: TextView = itemView.findViewById(R.id.tv_obtiaznost)
+        val tv_cas: TextView = itemView.findViewById(R.id.tv_cas)
 
         fun bind(score: Score) {
             tv_datum.text=score.datum
@@ -25,8 +29,8 @@ class ScoreAdapter: RecyclerView.Adapter<ScoreAdapter.ScoreViewHolder>() {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ScoreViewHolder {
-        return ScoreViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.score_riadok, parent, false))
-//        return LayoutInflater.from(parent.context).inflate(R.layout.score_riadok,parent,false).let { ScoreViewHolder(it) }
+//        return ScoreViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.score_riadok, parent, false))
+        return LayoutInflater.from(parent.context).inflate(R.layout.score_riadok,parent,false).let { ScoreViewHolder(it) }
     }
 
     override fun getItemCount() = zoznamScore.size
@@ -36,8 +40,8 @@ class ScoreAdapter: RecyclerView.Adapter<ScoreAdapter.ScoreViewHolder>() {
         holder.bind(score)
     }
 
-    fun setData(score: List<Score>){
-        this.zoznamScore = score
-        notifyDataSetChanged()
-    }
+//    fun setData(score: List<Score>){
+//        this.zoznamScore = score
+//        notifyDataSetChanged()
+//    }
 }
