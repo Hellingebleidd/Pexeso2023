@@ -24,11 +24,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        supportActionBar?.hide()
+
+        btnLeaderboard=findViewById(R.id.floatingActionButton)
+
         btnEasy=findViewById(R.id.buttonEasy)
         btnMedium=findViewById(R.id.buttonMedium)
         btnHard=findViewById(R.id.buttonHard)
-
-        btnLeaderboard=findViewById(R.id.floatingActionButton)
 
 
         val intent = Intent(this, PexesoActivity::class.java)

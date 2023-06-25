@@ -9,8 +9,10 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.SystemClock
 import android.util.Log
+import android.view.MenuItem
 import android.widget.ImageButton
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -40,15 +42,17 @@ class PexesoActivity : AppCompatActivity() {
     var pocetOtocenych:Int=0
     var uhadnutePary = 0
     var startTime:Long=0
-//    var bestTime = Long.MAX_VALUE
     private lateinit var bestVysledok: String
     private lateinit var obrazky: List<Karta>
     private lateinit var mScoreViewModel: ScoreViewModel
-//    private var isGameOn = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pexeso)
+
+        supportActionBar?.title="Main menu"
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
 
         hraciaPlocha = findViewById(R.id.hraciaPlocha)
 
@@ -92,6 +96,36 @@ class PexesoActivity : AppCompatActivity() {
 //        super.onSaveInstanceState(outState, outPersistentState)
 //        outState.putSerializable(BUNDLE_KEY, game)
 //    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId){
+            android.R.id.home ->{
+                showAlertDialog("actioBar")
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onBackPressed() {
+        showAlertDialog("phone")
+    }
+    private fun showAlertDialog(where:String){
+        val alertDialogBuilder = AlertDialog.Builder(this)
+        alertDialogBuilder.setTitle("Confirmation")
+        alertDialogBuilder.setMessage("Are you sure you want to go back?")
+        alertDialogBuilder.setPositiveButton("Yes") { dialog, _ ->
+            if(where=="actionBar"){
+                supportActionBar?.setDisplayHomeAsUpEnabled(false)
+            }
+            super.onBackPressed()
+            dialog.dismiss()
+        }
+        alertDialogBuilder.setNegativeButton("No") { dialog, _ ->
+            dialog.dismiss()
+        }
+        alertDialogBuilder.create().show()
+    }
 
     private fun startGame(pocetKariet: Int, stlpce:Int){
         startTime=SystemClock.elapsedRealtime()
