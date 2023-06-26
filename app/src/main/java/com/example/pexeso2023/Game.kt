@@ -5,7 +5,7 @@ import java.io.Serializable
 
 const val EASY_GAME_CARDS = 8
 const val MEDIUM_GAME_CARDS = 12
-const val HARD_GAME_CARDS = 20 //16
+const val HARD_GAME_CARDS = 18 //20 //16
 
 interface Game: Serializable {
 

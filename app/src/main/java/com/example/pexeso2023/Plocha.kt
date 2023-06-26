@@ -10,7 +10,7 @@ data class Plocha (val pocetKariet: Int, val portrait: Boolean) {
                     if (portrait) 3 else (MEDIUM_GAME_CARDS / 3)
                 }
                 HARD_GAME_CARDS -> {
-                    if (portrait) 4 else (HARD_GAME_CARDS / 4)
+                    if (portrait) 3 else (HARD_GAME_CARDS / 3)
                 }
                 else -> {2}
             }
