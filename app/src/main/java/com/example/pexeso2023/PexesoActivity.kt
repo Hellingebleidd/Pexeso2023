@@ -27,7 +27,6 @@ class PexesoActivity : AppCompatActivity() {
 
     companion object{
         const val TAG= "Pexeso_Activity"
-        const val BUNDLE_KEY = "game"
     }
 
     private lateinit var hraciaPlocha : RecyclerView
@@ -45,7 +44,6 @@ class PexesoActivity : AppCompatActivity() {
     var startTime:Long=0
     private lateinit var bestVysledok: String
     private lateinit var obrazky: List<Karta>
-//    private lateinit var mScoreViewModel: ScoreViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -120,8 +118,6 @@ class PexesoActivity : AppCompatActivity() {
 
     private fun startGame(){
         startTime=SystemClock.elapsedRealtime()
-//        isGameOn=true
-//        game = PexesoGame(pocetKariet,this)
         obrazky=game.getObrazky()
     }
 
@@ -209,7 +205,6 @@ class PexesoActivity : AppCompatActivity() {
 
         if(isWon()){
             var yourTime = SystemClock.elapsedRealtime()-startTime
-//            bestTime = updateBestTime(yourTime)
             bestVysledok = updateBestTime(yourTime)
             addScore(konvertujCas(yourTime))
             zobrazDialog(yourTime)
@@ -219,7 +214,7 @@ class PexesoActivity : AppCompatActivity() {
     private fun addScore(time:String){
         val datum= (LocalDate.now()).format(DateTimeFormatter.ofPattern("dd.MMMM")) //toString() //.substring(0,10)
         val time = time
-        var obtiaznost = "" //pocetKariet.toString()
+        var obtiaznost = ""
         when(pocetKariet){
             EASY_GAME_CARDS -> obtiaznost="easy"
             MEDIUM_GAME_CARDS -> obtiaznost="medium"
@@ -236,7 +231,6 @@ class PexesoActivity : AppCompatActivity() {
         return uhadnutePary==(pocetKariet/2)
     }
     private fun updateBestTime(time:Long):String{
-//        val pref = getPreferences(MODE_PRIVATE)
         val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
 
         val editor = sharedPreferences.edit()
@@ -256,7 +250,6 @@ class PexesoActivity : AppCompatActivity() {
     }
     private fun zobrazDialog(yourTime: Long){
         Log.d(TAG,"yourTime $yourTime")
-//        Log.d(TAG, "bestTime $bestTime")
         Log.d(TAG, "vysledok: $bestVysledok")
         val dialog = DialogVyhra(this, konvertujCas(yourTime), bestVysledok)
         dialog.showDialog()
@@ -268,14 +261,6 @@ class PexesoActivity : AppCompatActivity() {
         return "$min:$sekundy"
     }
 
-//    private fun insertDoDb(){
-//        val datum = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
-////        var scoreDao= ScoreDatabase.getDatabase(this).scoreDao()
-////        val scoreRepo = ScoreRepo(scoreDao)
-//        val score = Score(null,datum, "1:12", "easy")
-////        scoreRepo.upsertScore(score)
-//        mScoreViewModel.upsertScore(score)
-//    }
 
 }
 

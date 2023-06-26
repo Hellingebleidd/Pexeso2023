@@ -21,7 +21,6 @@ class DialogVyhra(private val context: Context, private val yourTime: String, pr
 //        builder.setMessage("Congratulations, you have won the game. please return to main menu\nYour Time: $yourTime\nBest Time: $bestTime")
 
         builder.setPositiveButton("OK"){dialog, _ ->
-            //insertujDoDbs()
             dialog.dismiss()
             if(context is Activity) context.finish()
         }
@@ -32,19 +31,4 @@ class DialogVyhra(private val context: Context, private val yourTime: String, pr
         dialog.show()
     }
 
-//    fun insertujDoDbs(){
-//        val datum = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
-//        var scoreDao= ScoreDatabase.getDatabase(context).scoreDao()
-//        val scoreRepo = ScoreRepo(scoreDao)
-//        val score = Score(null, datum, yourTime, "easy")
-//        scoreRepo.upsertScore(score)
-////        AsyncTask.execute {
-////            @Override
-////            fun run() {
-////                var score =
-////                    Score(null, datum, yourTime, "easy")
-////                scoreRepo.upsertScore(score)
-////            }
-////        }
-//    }
 }
