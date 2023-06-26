@@ -8,12 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.pexeso2023.databaza.Score
 
 class ScoreAdapter: RecyclerView.Adapter<ScoreAdapter.ScoreViewHolder>() {
-//miro
-//    var zoznamScore = emptyList<Score>()
-//        set(value){
-//            field=value
-//            notifyDataSetChanged()
-//        }
 
     private var zoznamScore = mutableListOf<Score>()
 
@@ -39,10 +33,6 @@ class ScoreAdapter: RecyclerView.Adapter<ScoreAdapter.ScoreViewHolder>() {
     override fun getItemCount() = zoznamScore.size
 
     override fun onBindViewHolder(holder: ScoreViewHolder, position: Int) {
-        val score = zoznamScore[position]
-//        holder.tv_datum.text = score.datum
-//        holder.tv_cas.text=score.cas
-//        holder.tv_obtiaznost.text = score.obtiaznost
         holder.bind(zoznamScore[position])
     }
 
@@ -52,7 +42,6 @@ class ScoreAdapter: RecyclerView.Adapter<ScoreAdapter.ScoreViewHolder>() {
             addAll(score)
 
         }
-//        this.zoznamScore = score
         notifyDataSetChanged()
     }
 
