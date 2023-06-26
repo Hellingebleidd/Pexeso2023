@@ -12,6 +12,11 @@ interface ScoreDao {
     suspend fun getAll(): List<Score>
 //    suspend fun getAll(): LiveData<List<Score>>
 
+    @Query("SELECT * FROM score_table ORDER BY cas ASC")
+    suspend fun getAllByTime(): List<Score>
+
+    @Query("SELECT * FROM score_table ORDER BY datum DESC")
+    suspend fun getAllByDate(): List<Score>
 
     @Upsert
     suspend fun upsertScore(score: Score)
