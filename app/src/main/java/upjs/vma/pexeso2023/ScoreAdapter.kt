@@ -1,12 +1,11 @@
-package com.vma.pexeso2023
+package upjs.vma.pexeso2023
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.pexeso2023.R
-import com.vma.pexeso2023.databaza.Score
+import upjs.vma.pexeso2023.databaza.Score
 
 class ScoreAdapter: RecyclerView.Adapter<ScoreAdapter.ScoreViewHolder>() {
 

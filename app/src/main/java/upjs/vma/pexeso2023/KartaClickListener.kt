@@ -1,4 +1,4 @@
-package com.vma.pexeso2023
+package upjs.vma.pexeso2023
 
 import android.widget.ImageButton
 

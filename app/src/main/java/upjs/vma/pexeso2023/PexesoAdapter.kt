@@ -1,4 +1,4 @@
-package com.vma.pexeso2023
+package upjs.vma.pexeso2023
 
 import android.content.Context
 import android.util.Log
@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.pexeso2023.R
 import kotlin.math.min
 
 //private val pocetKariet: Int): RecyclerView.Adapter<PexesoAdapter.KartaViewHolder>() {

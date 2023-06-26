@@ -1,4 +1,4 @@
-package com.vma.pexeso2023
+package upjs.vma.pexeso2023
 
 
 import android.content.Context
@@ -16,9 +16,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.pexeso2023.R
-import com.vma.pexeso2023.databaza.Score
-import com.vma.pexeso2023.databaza.ScoreDatabase
+import upjs.vma.pexeso2023.databaza.Score
+import upjs.vma.pexeso2023.databaza.ScoreDatabase
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter

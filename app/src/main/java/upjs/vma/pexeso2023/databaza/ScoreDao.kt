@@ -1,4 +1,4 @@
-package com.vma.pexeso2023.databaza
+package upjs.vma.pexeso2023.databaza
 
 import androidx.room.Dao
 import androidx.room.Query

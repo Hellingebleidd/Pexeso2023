@@ -1,4 +1,4 @@
-package com.vma.pexeso2023
+package upjs.vma.pexeso2023
 
 data class Plocha (val pocetKariet: Int, val portrait: Boolean) {
     fun getStlpce():Int {

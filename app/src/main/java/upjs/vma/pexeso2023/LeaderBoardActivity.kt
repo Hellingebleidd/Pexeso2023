@@ -1,4 +1,4 @@
-package com.vma.pexeso2023
+package upjs.vma.pexeso2023
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -6,10 +6,9 @@ import android.util.Log
 import android.widget.Button
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.lifecycle.lifecycleScope
-import com.example.pexeso2023.R
-import com.example.pexeso2023.databinding.LeaderboardBinding
-import com.vma.pexeso2023.databaza.Score
-import com.vma.pexeso2023.databaza.ScoreDatabase
+import upjs.vma.pexeso2023.databinding.LeaderboardBinding
+import upjs.vma.pexeso2023.databaza.Score
+import upjs.vma.pexeso2023.databaza.ScoreDatabase
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.launch
