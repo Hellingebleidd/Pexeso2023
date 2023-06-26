@@ -1,10 +1,11 @@
-package com.example.pexeso2023
+package com.vma.pexeso2023
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.content.Intent
 import android.util.Log
+import com.example.pexeso2023.R
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 

@@ -1,4 +1,4 @@
-package com.example.pexeso2023.databaza
+package com.vma.pexeso2023.databaza
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

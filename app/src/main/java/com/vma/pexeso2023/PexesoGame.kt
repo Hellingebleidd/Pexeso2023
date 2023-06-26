@@ -1,7 +1,8 @@
-package com.example.pexeso2023
+package com.vma.pexeso2023
 
 import android.content.Context
 import android.os.SystemClock
+import com.example.pexeso2023.R
 
 
 class PexesoGame(difficulty: Int, private val context: Context):Game {

@@ -1,6 +1,5 @@
-package com.example.pexeso2023
+package com.vma.pexeso2023
 
-import android.widget.ImageButton
 import java.io.Serializable
 
 const val EASY_GAME_CARDS = 8

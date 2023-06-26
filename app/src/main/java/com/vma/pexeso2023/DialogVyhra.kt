@@ -1,4 +1,4 @@
-package com.example.pexeso2023
+package com.vma.pexeso2023
 
 import android.app.Activity
 import android.app.AlertDialog
@@ -6,6 +6,7 @@ import android.content.Context
 import android.view.LayoutInflater
 
 import android.widget.TextView
+import com.example.pexeso2023.R
 
 class DialogVyhra(private val context: Context, private val yourTime: String, private val bestTime: String) {
     fun showDialog(){

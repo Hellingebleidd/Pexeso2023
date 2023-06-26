@@ -1,4 +1,4 @@
-package com.example.pexeso2023
+package com.vma.pexeso2023
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
