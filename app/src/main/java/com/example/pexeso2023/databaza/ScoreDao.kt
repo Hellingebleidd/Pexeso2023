@@ -21,8 +21,5 @@ interface ScoreDao {
     @Upsert
     suspend fun upsertScore(score: Score)
 
-//    @Query("DELETE FROM score_table WHERE datum < (NOW() - 30) ")
-//    fun deleteScore(datum:String)
 
-//    fun orderByDate()
 }
