@@ -73,7 +73,6 @@ class LeaderBoardActivity : AppCompatActivity() {
                 "datum"->{ scoreList = ScoreDatabase(this@LeaderBoardActivity).scoreDao().getAllByDate()}
                 else ->  scoreList = ScoreDatabase(this@LeaderBoardActivity).scoreDao().getAll()
             }
-//            scoreList = ScoreDatabase(this@LeaderBoardActivity).scoreDao().getAll()
             Log.i("Leaderboard_Activity", "velkost tabulky: ${scoreList.size}")
             binding.RVScore.apply {
                 layoutManager=LinearLayoutManager(this@LeaderBoardActivity)

@@ -75,23 +75,23 @@ class PexesoActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId){
             android.R.id.home ->{
-                showAlertDialog("actioBar")
+                showAlertDialog()
                 return true
             }
         }
         return super.onOptionsItemSelected(item)
     }
     override fun onBackPressed() {
-        showAlertDialog("phone")
+        showAlertDialog()
     }
-    private fun showAlertDialog(where:String){
+    private fun showAlertDialog(){
         val alertDialogBuilder = AlertDialog.Builder(this)
         alertDialogBuilder.setTitle("Confirmation")
         alertDialogBuilder.setMessage("Are you sure you want to go back?")
         alertDialogBuilder.setPositiveButton("Yes") { dialog, _ ->
-            if(where=="actionBar"){
-                supportActionBar?.setDisplayHomeAsUpEnabled(false)
-            }
+//            if(where=="actionBar"){
+//                supportActionBar?.setDisplayHomeAsUpEnabled(false)
+//            }
             super.onBackPressed()
             dialog.dismiss()
         }
@@ -110,7 +110,6 @@ class PexesoActivity : AppCompatActivity() {
             }
         })
         hraciaPlocha.adapter=adapter
-        hraciaPlocha.setHasFixedSize(true)
         hraciaPlocha.layoutManager = GridLayoutManager(this, plocha.getStlpce())
 
     }
